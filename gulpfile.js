@@ -7,7 +7,7 @@ var webpackConfig = require('./webpack.config.js')
 
 gulp.task('default', ['build'])
 
-gulp.task('build', ['process-html'], function (callback) {
+gulp.task('build', ['clean'], function (callback) {
     webpack(webpackConfig, function (err, stats) {
         if (err) {
             throw new gutil.PluginError('webpack:build', err)
@@ -19,7 +19,7 @@ gulp.task('build', ['process-html'], function (callback) {
     })
 })
 
-gulp.task('dev-server', ['process-html'], function (callback) {
+gulp.task('dev-server', ['clean'], function (callback) {
     new WebpackDevServer(webpack(webpackConfig), {
         contentBase: 'dist',
     }).listen(8080, 'localhost', function (err) {
@@ -28,10 +28,6 @@ gulp.task('dev-server', ['process-html'], function (callback) {
         }
         gutil.log('[webpack-dev-server]', 'http://localhost:8080/index.html')
     });
-})
-
-gulp.task('process-html', ['clean'], function() {
-    return gulp.src('src/index.html').pipe(gulp.dest('dist/'))
 })
 
 gulp.task('clean', function () {

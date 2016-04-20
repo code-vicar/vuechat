@@ -1,6 +1,7 @@
 var path = require('path')
 var process = require('process')
 var webpack = require('webpack')
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var isProdEnv = process.env.NODE_ENV === 'production'
 
@@ -15,7 +16,12 @@ var config = {
     filename: 'app.js',
     publicPath: '/'
   },
-  plugins: [],
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'index.html',
+      inject: true
+    })
+  ],
   module: {
     loaders: [
       {
@@ -42,8 +48,8 @@ var config = {
 
 if (isProdEnv) {
   // https://webpack.github.io/docs/cli.html#production-shortcut-p
-  config.plugins.push(new webpack.optimize.UglifyJsPlugin())
-  config.plugins.push(new webpack.optimize.OccurenceOrderPlugin())
+  config.plugins.unshift(new webpack.optimize.OccurenceOrderPlugin())
+  config.plugins.unshift(new webpack.optimize.UglifyJsPlugin())
 } else {
   // https://webpack.github.io/docs/cli.html#development-shortcut-d
   config.debug = true
